@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dashboard Spotify</title>
+    <script src="env.js"></script>
+    <script type="module" src="js/dashboard.js"></script>
+</head>
+<body>
+    <h1>Dashboard Spotify</h1>
+
+    <div id="profile"></div>
+
+    <h2>Funções Disponíveis</h2>
+    <div id="viewer-controls" style="display:none;">
+        <button id="btn-current">Ver o que está tocando</button>
+        <pre id="current-track"></pre>
+    </div>
+
+
+    <div id="manager-controls" style="display:none;">
+        <button id="btn-play">Play</button>
+        <button id="btn-pause">Pause</button>
+        <button id="btn-next">Next</button>
+    </div>
+</body>
+</html>
