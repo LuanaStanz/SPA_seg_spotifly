@@ -1,4 +1,5 @@
 # SPA_seg_spotifly
+```
 │
 ├── index.html      ← PÁG INICIAL PÚBLICA - botão "login viewer", "login manager", inicia OAuth PKCE
 ├── callback.html   ← PÁG p/ onde SPOTIFY redireciona - ler code da URL, ler state, valida PKCE, troca code pelo acess_token, redireciona usuário p/ dashboard
@@ -21,3 +22,4 @@
 └── .github/
     └── workflows/
         └── deploy.yml ← injeta CLIENT_ID, cria env.js, publica no GitHub Pages
+```
