@@ -12,34 +12,33 @@ const redirectUri = window.location.origin + window.location.pathname.replace('c
 
 
 if (state !== savedState) {
-alert('ERRO: STATE inválido. Possível ataque CSRF.');
-throw new Error('State mismatch');
+    alert('ERRO: STATE inválido. Possível ataque CSRF.');
+    throw new Error('State mismatch');
 }
 
 
 async function exchangeToken() {
-const body = new URLSearchParams({
-grant_type: 'authorization_code',
-code: code,
-redirect_uri: redirectUri,
-client_id: window.CLIENT_ID,
-code_verifier: codeVerifier
-});
+    const body = new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: redirectUri,
+        client_id: window.CLIENT_ID,
+        code_verifier: codeVerifier
+    });
 
 
-const res = await fetch('https://accounts.spotify.com/api/token', {
-method: 'POST',
-headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-body
-});
+    const res = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body
+    });
 
 
-const data = await res.json();
-sessionStorage.setItem('access_token', data.access_token);
-sessionStorage.setItem('granted_scope', data.scope);
+    const data = await res.json();
+    sessionStorage.setItem('access_token', data.access_token);
+    sessionStorage.setItem('granted_scope', data.scope);
 
-
-window.location = 'dashboard.html';
+    window.location = 'dashboard.html';
 }
 
 
