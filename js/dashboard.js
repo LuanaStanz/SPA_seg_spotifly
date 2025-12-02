@@ -17,9 +17,9 @@ if (scope.includes('user-modify-playback-state')) {
     document.getElementById('manager-controls').style.display = 'block';
 }
 
-// Função auxiliar para imprimir erros detalhados
+//imprimir erros detalhados
 async function handleApiError(response, endpoint) {
-    let msg = `⚠️ ERRO ao chamar ${endpoint}\n\n`;
+    let msg = `ERRO ao chamar ${endpoint}\n\n`;
 
     msg += `Status: ${response.status}\n`;
 
@@ -31,20 +31,65 @@ async function handleApiError(response, endpoint) {
     }
 
     if (response.status === 401) {
-        msg += "\n PS: response.status === 401. \nO token pode ter expirado. Tente fazer login novamente.";
+        msg += "\n PS: 401 - Unauthorized. Você não enviou um token válido ou o token expirou.";
     }
 
     if (response.status === 403) {
-        msg += "\n response.status === 403 \nPS: talvez você não tem o escopo necessário.";
+        msg += "\n PS: 403 Forbidden - talvez você não tem o escopo necessário.";
     }
 
     if (response.status === 404) {
-        msg += "\n response.status === 403 \nNenhum dispositivo ativo detectado.";
+        msg += "\n 403 - Nenhum dispositivo ativo detectado.";
     }
 
     alert(msg);
 }
+//filtrar resposta gigante em json
+function formatCurrentlyPlaying(data) {
+    if (!data || !data.item) {
+        return "Nada está tocando agora.";
+    }
 
+    const track = data.item;
+
+    return `
+**Música atual**
+- **Nome:** ${track.name}
+- **Artista:** ${track.artists?.map(a => a.name).join(', ') || "Desconhecido"}
+- **Álbum:** ${track.album?.name || "Desconhecido"}
+- **Duração:** ${(track.duration_ms / 1000 / 60).toFixed(2)} min
+- **Preview:** ${track.preview_url || "Indisponível"}
+
+**Progresso**
+- ${Math.floor(data.progress_ms / 1000)}s de ${Math.floor(track.duration_ms / 1000)}s
+
+**Tocando:** ${data.is_playing ? "Sim" : "Não"}
+`.trim();
+}
+function formatPlayerInfo(data) {
+    if (!data || !data.device) {
+        return "Nenhum player ativo encontrado.";
+    }
+
+    return `
+**Dispositivo**
+- **Nome:** ${data.device.name}
+- **Tipo:** ${data.device.type}
+- **Volume:** ${data.device.volume_percent}%
+- **Ativo:** ${data.device.is_active ? "Sim" : "Não"}
+
+**Status**
+- **Tocando:** ${data.is_playing ? "Sim" : "Não"}
+- **Shuffle:** ${data.shuffle_state ? "Ligado" : "Desligado"}
+- **Repeat:** ${data.repeat_state}
+
+**Contexto**
+- ${data.context?.type || "Nenhum"}
+- ${data.context?.external_urls?.spotify || ""}
+`.trim();
+}
+
+// ---------- BOTÕES ---------- //
 //VIEWER: VER O QUE ESTÁ TOCANDO
 const btnCurrent = document.getElementById('btn-current');
 if (btnCurrent) {
@@ -58,9 +103,12 @@ if (btnCurrent) {
         if (!res.ok) return handleApiError(res, endpoint);
 
         const data = await res.json();
-        document.getElementById('current-track').innerText = JSON.stringify(data, null, 2);
+
+        document.getElementById('current-track').innerText =
+            formatCurrentlyPlaying(data);
     };
 }
+
 
 //MANAGER: INFO DO PLAYER
 const btnPlayerInfo = document.getElementById('btn-player-info');
@@ -75,7 +123,9 @@ if (btnPlayerInfo) {
         if (!res.ok) return handleApiError(res, endpoint);
 
         const data = await res.json();
-        document.getElementById('player-info').innerText = JSON.stringify(data, null, 2);
+
+        document.getElementById('player-info').innerText =
+            formatPlayerInfo(data);
     };
 }
 
