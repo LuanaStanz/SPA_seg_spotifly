@@ -10,12 +10,15 @@ const savedState = sessionStorage.getItem('pkce_state');
 const codeVerifier = sessionStorage.getItem('pkce_verifier');
 const redirectUri = window.location.origin + window.location.pathname.replace('callback.html','') + 'callback.html';
 
+if (!code) {
+    alert("Erro: nenhum 'code' recebido do Spotify.");
+    throw new Error("Missing authorization code.");
+}
 
 if (state !== savedState) {
     alert('ERRO: STATE inválido. Possível ataque CSRF.');
     throw new Error('State mismatch');
 }
-
 
 async function exchangeToken() {
     const body = new URLSearchParams({

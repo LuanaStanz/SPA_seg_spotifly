@@ -1,18 +1,25 @@
+// Gera string aleatória criptograficamente segura
 export function generateRandomString(length) {
-  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < length; i++) {
-    result += charset.charAt(Math.floor(Math.random() * charset.length));
-  }
-  return result;
+    const array = new Uint8Array(length);
+    crypto.getRandomValues(array);
+    return Array.from(array, dec => ('0' + dec.toString(16)).substr(-2)).join('');
 }
 
-export async function sha256(verifier) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(verifier);
-  const hash = await crypto.subtle.digest('SHA-256', data);
-  return btoa(String.fromCharCode(...new Uint8Array(hash)))
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '');
+// Faz SHA-256
+export async function sha256(plain) {
+    const enc = new TextEncoder();
+    const data = enc.encode(plain);
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    return base64UrlEncode(hash);
+}
+
+// Converte hash para Base64URL
+function base64UrlEncode(bytes) {
+    let str = '';
+    const bytesArr = new Uint8Array(bytes);
+    bytesArr.forEach(b => str += String.fromCharCode(b));
+    return btoa(str)
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
 }
