@@ -15,11 +15,11 @@
 │   ├── dashboard.js ←identificar os scopes concedidos, renderizar interface correta, conectar botões com Spotify API
 │   └── spotify.js   ←getCurrentlyPlaying(), play(), pause(), nextTrack()
 │
-├── img/
-│
 ├── env.js        ← será gerado pelo GitHub Actions (CLIENT_ID), workflow cria ele durante o deploy
 │
 └── .github/
     └── workflows/
         └── deploy.yml ← injeta CLIENT_ID, cria env.js, publica no GitHub Pages
 ```
+Web API do spotify está usando Redirect URIs: https://luanastanz.github.io/SPA_seg_spotifly/callback.html
+SITE NO AR: https://luanastanz.github.io/SPA_seg_spotifly/dashboard.html
