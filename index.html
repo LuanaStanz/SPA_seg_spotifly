@@ -3,64 +3,133 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spotify OAuth2 PKCE – Login</title>
+    <title>Spotify Aero – Login</title>
     <script src="env.js"></script>
     <script type="module" src="js/auth.js"></script>
     <style>
         :root {
-            --bg-color: #121212;
-            --card-color: #181818;
-            --text-color: #FFFFFF;
-            --subtext-color: #B3B3B3;
-            --spotify-green: #1DB954;
-            --spotify-green-hover: #1ed760;
+            --primary-grad: linear-gradient(180deg, #a2d9ff 0%, #ffffff 100%);
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.9);
+            --spotify-gloss-top: #85ffbd;
+            --spotify-gloss-mid: #1DB954;
+            --spotify-gloss-bot: #158f40;
+            --text-main: #2c3e50;
         }
+        
         * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', 'Frutiger', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             flex-direction: column;
+            overflow: hidden;
+            position: relative;
         }
+
+
+        .orb-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+        .orb {
+            position: absolute; border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.1));
+            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+            animation: floatUp infinite ease-in-out;
+        }
+        .orb-1 { width: 150px; height: 150px; left: 10%; bottom: -150px; animation-duration: 15s; opacity: 0.6; }
+        .orb-2 { width: 80px; height: 80px; left: 25%; bottom: -80px; animation-duration: 9s; opacity: 0.4; animation-delay: 2s; }
+        .orb-3 { width: 300px; height: 300px; right: 10%; top: -100px; animation-duration: 25s; opacity: 0.3; background: radial-gradient(circle at 30% 30%, #ccffcc, transparent); }
+        .orb-4 { width: 50px; height: 50px; left: 50%; bottom: -50px; animation-duration: 12s; opacity: 0.7; }
+        
+        @keyframes floatUp {
+            0% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-50vh) translateX(20px); }
+            100% { transform: translateY(-110vh) translateX(-20px); }
+        }
+
+
         .container {
-            background-color: var(--card-color);
+            background: var(--glass-bg);
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 20px;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.2), 
+                inset 0 0 0 1px var(--glass-border),
+                inset 0 2px 10px rgba(255,255,255,0.8);
             text-align: center;
-            max-width: 450px;
             width: 90%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255,255,255,0.9);
         }
-        h1 { font-size: 2rem; margin-bottom: 10px; font-weight: 700; }
-        p { color: var(--subtext-color); margin-bottom: 30px; }
-        button {
-            background-color: var(--spotify-green);
-            color: #000;
-            border: none;
-            padding: 14px 32px;
-            border-radius: 500px;
-            font-size: 0.9rem;
+
+        h1 {
+            color: var(--text-main);
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin: 10px;
-            width: 100%;
-            max-width: 300px;
+            text-shadow: 0 1px 0 rgba(255,255,255,1);
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
         }
-        button:hover { background-color: var(--spotify-green-hover); transform: scale(1.02); }
-        button:active { transform: scale(0.98); }
+        p { color: #555; margin-bottom: 25px; font-size: 0.95rem; text-shadow: 0 1px 0 rgba(255,255,255,0.7); }
+
+        button {
+            background: linear-gradient(180deg, var(--spotify-gloss-top) 0%, var(--spotify-gloss-mid) 49%, var(--spotify-gloss-bot) 51%, var(--spotify-gloss-mid) 100%);
+            border: 1px solid #0f6e30;
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-shadow: 0 -1px 1px rgba(0,0,0,0.3);
+            box-shadow: 
+                inset 0 1px 0 rgba(255,255,255,0.7),
+                0 3px 5px rgba(0,0,0,0.2); 
+            cursor: pointer;
+            width: 100%;
+            margin: 8px 0;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        
+        button::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 50%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.6), rgba(255,255,255,0.1));
+            border-radius: 30px 30px 100% 100%;
+            pointer-events: none;
+        }
+
+        button:hover {
+            filter: brightness(1.1);
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(29, 185, 84, 0.4);
+        }
+        button:active {
+            transform: scale(0.98) translateY(1px);
+        }
+
     </style>
 </head>
 <body>
+    <div class="orb-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+    </div>
+
     <div class="container">
-        <h1>Login Spotify</h1>
-        <p>Autenticação via PKCE Flow</p>
+        <h1>Spotify Aero</h1>
+        <p>Login seguro via PKCE</p>
 
         <button id="login-viewer">Entrar como Viewer</button>
         <button id="login-manager">Entrar como Manager</button>

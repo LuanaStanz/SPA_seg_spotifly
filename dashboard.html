@@ -3,91 +3,162 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Spotify</title>
+    <title>Dashboard Aero</title>
     <script src="env.js"></script>
     <script type="module" src="js/dashboard.js"></script>
     <style>
+        
         :root {
-            --bg-color: #121212;
-            --card-color: #181818;
-            --text-color: #FFFFFF;
-            --subtext-color: #B3B3B3;
-            --spotify-green: #1DB954;
-            --spotify-green-hover: #1ed760;
+            --glass-bg: rgba(240, 255, 245, 0.75);
+            --widget-bg: linear-gradient(to bottom, #ffffff 0%, #e6f0fa 100%);
+            
+         
+            --spotify-gloss-top: #85ffbd;
+            --spotify-gloss-mid: #1DB954;
+            --spotify-gloss-bot: #158f40;
+            
+            --danger-gloss-top: #ffb3b3;
+            --danger-gloss-mid: #ff4444;
+            --danger-gloss-bot: #cc0000;
+
+            --text-dark: #2c3e50;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
+            background: url('https://w.wallhaven.cc/full/l8/wallhaven-l83o92.jpg') no-repeat center center fixed; 
+            background-color: #70c4ff;
+            background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+            background-size: cover;
+            min-height: 100vh;
             padding: 20px;
             display: flex;
             justify-content: center;
-            min-height: 100vh;
         }
+
         .container {
-            background-color: var(--card-color);
+            background: var(--glass-bg);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 15px;
             padding: 30px;
-            border-radius: 10px;
             width: 100%;
-            max-width: 600px;
-            box-shadow: 0 4px 60px rgba(0,0,0,0.5);
+            max-width: 650px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(255,255,255,0.5);
+            backdrop-filter: blur(15px);
+            position: relative;
         }
-        h1 { text-align: center; margin-bottom: 20px; }
+
+        h1 {
+            text-align: center;
+            color: var(--text-dark);
+            text-shadow: 0 1px 0 #fff;
+            margin-bottom: 25px;
+            font-size: 2rem;
+            letter-spacing: -1px;
+        }
+
         h2 {
-            font-size: 1.1rem;
-            color: var(--subtext-color);
-            margin: 25px 0 15px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 5px;
+            font-size: 1rem;
+            color: #4a6fa5;
+            margin: 20px 0 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            border-bottom: 2px solid rgba(255,255,255,0.5);
+            padding-bottom: 5px;
         }
-        button {
-            background-color: var(--spotify-green);
-            color: #000;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 0.9rem;
-            margin: 5px 5px 5px 0;
-            transition: transform 0.1s;
-        }
-        button:hover { background-color: var(--spotify-green-hover); transform: scale(1.05); }
-        button:active { transform: scale(0.95); }
-        
+
+
         pre {
-            background-color: #000;
-            color: var(--spotify-green);
+            background: #fff;
+            border: 1px solid #ccc;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            color: #333;
             padding: 15px;
-            border-radius: 6px;
+            border-radius: 8px;
             overflow-x: auto;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Consolas', monospace;
             font-size: 0.85rem;
             margin-top: 10px;
-            border: 1px solid #333;
-            max-height: 250px;
+            max-height: 200px;
+        }
+
+        button {
+            background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 49%, #dcdcdc 51%, #f5f5f5 100%);
+            border: 1px solid #999;
+            color: #333;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1), inset 0 1px 0 #fff;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
         }
         
-        #profile { margin-bottom: 20px; text-align: center; }
-        .control-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        button::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 50%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.5), rgba(255,255,255,0.1));
+            border-radius: 20px 20px 100% 100%;
+            pointer-events: none;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+
+     
+        #btn-player-info, #btn-play, #btn-current {
+            background: linear-gradient(180deg, var(--spotify-gloss-top) 0%, var(--spotify-gloss-mid) 49%, var(--spotify-gloss-bot) 51%, var(--spotify-gloss-mid) 100%);
+            border: 1px solid #14803a;
+            color: white;
+            text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
+        }
+       
+        #btn-logout {
+            background: linear-gradient(180deg, var(--danger-gloss-top) 0%, var(--danger-gloss-mid) 49%, var(--danger-gloss-bot) 51%, var(--danger-gloss-mid) 100%);
+            border: 1px solid #990000;
+            color: white;
+            text-shadow: 0 -1px 0 rgba(0,0,0,0.3);
+            width: 100%;
+            margin: 30px 0 0 0; 
+            padding: 12px;
+            font-size: 1rem;
+        }
+        #btn-logout:hover {
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.5);
+        }
+
+        .control-group {
+            display: flex; gap: 5px; flex-wrap: wrap; 
+            background: rgba(255,255,255,0.4);
+            padding: 10px; border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+        
+        #profile { text-align: center; margin-bottom: 20px; font-weight: bold; color: #333; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Dashboard Spotify</h1>
+        <h1>Dashboard Aero</h1>
 
-        <div id="profile">
-            </div>
+        <div id="profile"></div>
 
-        <h2>Status do Player</h2>
-        <button id="btn-player-info">Ver info do player</button>
-        <pre id="player-info">Clique no botão acima para ver os dados.</pre>
+        <h2>Status</h2>
+        <button id="btn-player-info">ℹ️ Info do Player</button>
+        <pre id="player-info">Aguardando dados...</pre>
 
         <div id="manager-controls" style="display:none;">
-            <h2>Controles (Manager)</h2>
+            <h2>Controles</h2>
             <div class="control-group">
                 <button id="btn-play">▶ Play</button>
                 <button id="btn-pause">⏸ Pause</button>
@@ -96,10 +167,24 @@
         </div>
 
         <div id="viewer-controls" style="display:none;">
-            <h2>Em Execução (Viewer)</h2>
-            <button id="btn-current">O que está tocando?</button>
+            <h2>Tocando Agora</h2>
+            <div class="control-group">
+                <button id="btn-current">🎵 Atualizar Faixa</button>
+            </div>
             <pre id="current-track">...</pre>
         </div>
+
+        <button id="btn-logout">Sair do Sistema</button>
     </div>
+
+    <script>
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            // Limpa tokens do LocalStorage e SessionStorage
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            window.location.href = 'index.html';
+        });
+    </script>
 </body>
 </html>
