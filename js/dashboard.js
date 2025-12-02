@@ -24,6 +24,12 @@ if (btnCurrent) btnCurrent.onclick = async () => {
 };
 
 // Manager actions
+const btnPlayerInfo = document.getElementById('btn-player-info');
+if (btnPlayerInfo) btnPlayerInfo.onclick = async () => {
+    const data = await apiGET('https://api.spotify.com/v1/me/player');
+    document.getElementById('player-info').innerText = JSON.stringify(data, null, 2);
+};
+
 const btnPlay = document.getElementById('btn-play');
 if (btnPlay) btnPlay.onclick = () => apiPUT('https://api.spotify.com/v1/me/player/play');
 
